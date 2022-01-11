@@ -1,0 +1,2 @@
+class TypeInvalidError(Exception):
+    pass
