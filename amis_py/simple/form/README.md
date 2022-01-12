@@ -11,11 +11,18 @@ class User(Model):
     password = StringField(name="password")
 
 
-from amis_py.simple.form import SimpleForm, form_submit
+from amis_py.simple.form import SimpleForm, api, init_api
 from amis_py.component import Page
 from amis_py import app 
 
 class UserForm(SimpleForm):
+
+    @init_api
+    def init(self):
+        return {
+            "username": "",
+            "password": ""
+        }
 
     def create(self):
         self.data = {
@@ -29,7 +36,7 @@ class UserForm(SimpleForm):
             "password": InputPassword()
         }
 
-    @form_submit
+    @api
     def add_user(self, username, password):
         user = User(username=username, password=password).commit()
 

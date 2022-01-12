@@ -1,5 +1,6 @@
 from amis_py.components import Form
 from amis_py.exceptions import TypeInvalidError
+from logging import getLogger
 
 
 class SimpleForm(Form):
@@ -21,10 +22,23 @@ class SimpleForm(Form):
             raise TypeInvalidError(
                 "component Form can't accept view with type"
                 "{}".format(type(view)))
-        for k, v in view:
-            for default_k, default_v in self.data.items():
+        for default_k, default_v in self.data.items():
+            hitted = False
+            for k, v in view.items():
                 if k == default_k:
+                    hitted = True
+                    if not hasattr(v, "render"):
+                        raise TypeInvalidError(
+                            "set invalid component {} as view".format(
+                                v.__class__.__name__
+                            )
+                        )
+                    v.name = k
                     self.__view.get("body").append(v.render())
+            if not hitted:
+                getLogger().warning(
+                    "{} was setted in default data,"
+                    "but not setted in view".format(default_k))
 
     def create(self):
         self.data = {}
