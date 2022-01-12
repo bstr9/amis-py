@@ -1,6 +1,5 @@
 from .form_item import FormItem
 from .properties import FormItemProperties, _Prop
-from ..base import BaseComponent
 
 
 class InputNumberProperties(FormItemProperties):
