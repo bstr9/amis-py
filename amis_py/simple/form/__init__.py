@@ -11,34 +11,38 @@ class SimpleForm(Form):
     }
 
     def __init__(self):
+        # use self.create() to generate default data
         self.data = {}
         self.create()
-        view = self.view()
         if not isinstance(self.data, dict):
             raise TypeInvalidError(
                 "component Form can't accept data with type"
                 "{}".format(type(self.data)))
+
+        # use self.view() to get default view style
+        view = self.view()
         if not isinstance(view, dict):
             raise TypeInvalidError(
                 "component Form can't accept view with type"
                 "{}".format(type(view)))
+
+        # fulfill the default value to view
         for default_k, default_v in self.data.items():
             hitted = False
-            for k, v in view.items():
-                if k == default_k:
+            for view_k, view_v in view.items():
+                if view_k == default_k:
                     hitted = True
-                    if not hasattr(v, "render"):
+                    if not hasattr(view_v, "render"):
                         raise TypeInvalidError(
                             "set invalid component {} as view".format(
-                                v.__class__.__name__
+                                view_v.__class__.__name__
                             )
                         )
-                    v.name = k
-                    self.__view.get("body").append(v.render())
+                    view_v.name = view_k
+                    self.__view.get("body").append(view_v.render())
             if not hitted:
-                getLogger().warning(
-                    "{} was setted in default data,"
-                    "but not setted in view".format(default_k))
+                getLogger().warning(f"{default_k} was setted in default data,"
+                                    "but not setted in view")
 
     def create(self):
         self.data = {}

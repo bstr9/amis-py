@@ -5,24 +5,17 @@ from tests.exceptions import UnitTestException
 class TestSimpleForm(TestCase):
     def test_default_data(self):
         from amis_py.simple.form import SimpleForm
-        from amis_py.components.form import (
-            InputNumber, InputText, InputPassword, InputEmail)
+        from amis_py.components.form import InputNumber, InputNumberProperties
 
         class TestForm(SimpleForm):
             def create(self):
                 self.data = {
                     "id": None,
-                    "name": "",
-                    "password": "",
-                    "email": ""
                 }
 
             def view(self):
                 return {
-                    "id": InputNumber(),
-                    "name": InputText(),
-                    "password": InputPassword(),
-                    "email": InputEmail()
+                    "id": InputNumber(InputNumberProperties(label="id")),
                 }
 
         test_form = TestForm()
@@ -30,13 +23,11 @@ class TestSimpleForm(TestCase):
         for item in view.get("body"):
             label = item.get("label")
             if label == "id":
-                assert item == {}
-            elif label == "name":
-                assert item == {}
-            elif label == "password":
-                assert item == {}
-            elif label == "email":
-                assert item == {}
+                assert item == {
+                    "type": "input-number",
+                    "label": "id",
+                    "name": "id"
+                                }
             else:
                 raise UnitTestException(
                     f"invalid label {label} in TestSimpleForm view")

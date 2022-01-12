@@ -13,7 +13,3 @@ class BaseComponent:
 
     def render(self):
         return {}
-
-    def _set_default(self, key, value, default=None):
-        if not is_default(value, default):
-            self.__view.update({key, value})
