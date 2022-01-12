@@ -1,5 +1,7 @@
 # amis-py
 
+![unittest](https://github.com/bstr9/amis-py/actions/workflows/unittest.yml/badge.svg)
+
 ## Examples
 
 DataSource -> Model -> ViewModel -> View(amis json)
