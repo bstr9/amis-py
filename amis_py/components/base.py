@@ -1,6 +1,3 @@
-from amis_py.utils import is_default
-
-
 class BaseComponent:
     __type = "base"
     __view = {}

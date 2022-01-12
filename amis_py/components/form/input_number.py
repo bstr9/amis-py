@@ -22,7 +22,7 @@ class InputNumberProperties(FormItemProperties):
         return instance
 
 
-class InputNumber(BaseComponent):
+class InputNumber(FormItem):
     """
     doc:
     """
