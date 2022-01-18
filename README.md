@@ -52,6 +52,7 @@ class UserForm(Form):
                 InputEmailProperties(label="email"))
         }
 
+
 if __name__ == "__main__"
     app = App()
     app.add(Page().add(UserForm()))

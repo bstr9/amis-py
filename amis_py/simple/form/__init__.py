@@ -11,7 +11,7 @@ class SimpleForm(Form):
     }
 
     def __init__(self):
-        # use self.create() to generate default data
+        # use self.create() to generate default dataset
         self.data = {}
         self.create()
         if not isinstance(self.data, dict):
@@ -45,10 +45,17 @@ class SimpleForm(Form):
                                     "but not setted in view")
 
     def create(self):
+        # use create function to generate default dataset
         self.data = {}
 
+    def update(self):
+        # use update function to update model dataset
+        pass
+
     def view(self):
+        # use view function to define the how the form looks like
         return {}
 
     def render(self):
+        # the render function is the hook for amis_py.components.BaseComponent
         return self.__view
