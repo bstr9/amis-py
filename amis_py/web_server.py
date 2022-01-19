@@ -1,4 +1,6 @@
 import re
+import sys
+import time
 import json
 import socket
 import hashlib
@@ -153,38 +155,70 @@ class Response:
 
 
 class App:
-
-    def __init__(self, module=__name__, port=8000):
+    def __init__(
+            self,
+            module=__name__,
+            host="0.0.0.0",
+            port=8000,
+            thread=5):
         self.response = Response()
         self.routes = {}
         self.module = module
         self.port = port
+        self.host = host
+        self.thread = thread
         self._stopped = False
+        self._threads = []
 
-    def _listen(self, req_conn, req_addr):
+    def _listen(self, socket):
         try:
-            request = req_conn.recv(1024).decode('utf-8')
-            self.recv_request(request)
-            for res in self.responses:
-                req_conn.send(res)
-            req_conn.close()
+            while not self._stopped:
+                req_conn, req_addr = socket.accept()
+                request = req_conn.recv(1024).decode('utf-8')
+                self.recv_request(request)
+                for res in self.responses:
+                    req_conn.send(res)
+                req_conn.close()
         except Exception as e:
             print(e)
             req_conn.close()
 
     def run(self):
-        _socket = socket.socket()
-        _socket.bind(('127.0.0.1', self.port))
-        print('server run at 127.0.0.1:{}...'.format(self.port))
-        _socket.listen(5)
-        while not self._stopped:
-            client_connection, client_address = _socket.accept()
+        self._stopped = False
+        _socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        _socket.setsockopt(
+            socket.SOL_SOCKET,
+            socket.SO_REUSEADDR,
+            1
+        )
+        _socket.bind((self.host, self.port))
+        print('server run at {}:{}...'.format(self.host, self.port))
+        _socket.listen(10)
+        for _ in range(self.thread):
             t = threading.Thread(
                 target=self._listen,
-                args=(client_connection, client_address),
+                args=(_socket,),
                 daemon=True
-            ).start()
-            t.join()
+            )
+            self._threads.append(t)
+            t.start()
+        while True:
+            if self._stopped:
+                print("stop server")
+                break
+            for index, _ in enumerate(self._threads):
+                if not t.is_alive():
+                    print("have dead thread, recreate one")
+                    t = threading.Thread(
+                        target=self._listen,
+                        args=(socket),
+                        daemon=True
+                    )
+                    self._threads[index] = t
+                    t.start()
+            time.sleep(1)
+        print("stop server")
+        _socket.shutdown(2)
         _socket.close()
 
     def recv_request(self, request):
@@ -201,6 +235,8 @@ class App:
                 if re.match("<(.*)>", r):
                     params_keys.append(r.strip("<").strip(">"))
                     splited_routes[i] = "(.*)"
+            if len(splited_routes) != len(self.request.path.split("/")):
+                continue
             re_route = "/".join(splited_routes)
             match = re.match(re_route, self.request.path)
             if match:

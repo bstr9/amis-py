@@ -9,47 +9,42 @@ class TestWebResponse(TestCase):
     def test_url_regex(self):
         port = 1111
         app = App(port=port)
-        t = threading.Thread(
-            target=app.run, args=(), daemon=True).start()
 
         user_url = "/api/v1/user/<id>"
         user_name_url = "/api/v1/user/<id>/name"
+        user_update_name_url = "/api/v1/user/<id>/name/<name>"
 
         def user_test(id):
-            assert id == '1'
-            return 1
+            return "user" + id
 
         def user_name_test(id):
-            assert id == "1"
-            return "test"
+            return id
+
+        def user_update_name(id, name):
+            return "user" + id + name
 
         app.add_route(user_url, user_test)
         app.add_route(user_name_url, user_name_test)
+        app.add_route(user_update_name_url, user_update_name)
 
-        requests.get(
-            "http://localhost:{}{}".format(port, user_url))
-        requests.get(
-            "http://localhost:{}{}".format(port, user_name_url))
-
-        app.stop()
-        t.join()
-
-    def test_return_json(self):
-        port = 1111
-        app = App(port=port)
-        t = threading.Thread(
+        threading.Thread(
             target=app.run, args=(), daemon=True).start()
 
-        user_info_url = "/api/v1/user/<id>/info"
-
-        def user_info(id):
-            assert id == "1"
-            return {"name": "test", "id": "1"}
-
-        app.add_route(user_info_url, user_info)
         res = requests.get(
-            "http://localhost:{}{}".format(port, user_info_url))
-        assert res.json() == {"name": "test", "id": "1"}
+            "http://localhost:{}{}".format(
+                port, user_url.replace("<id>", "1")))
+        assert res.text == "user1"
+        res = requests.get(
+            "http://localhost:{}{}".format(
+                port, user_name_url.replace("<id>", "2")))
+        assert res.text == "2"
 
+        res = requests.post(
+            "http://localhost:{}{}".format(
+                port,
+                user_update_name_url.replace(
+                    "<id>", "3").replace("<name>", "test")
+            )
+        )
+        assert res.text == "user3test"
         app.stop()
-        t.join()
