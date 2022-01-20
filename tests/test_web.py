@@ -38,7 +38,6 @@ class TestWebResponse(TestCase):
             "http://localhost:{}{}".format(
                 port, user_name_url.replace("<id>", "2")))
         assert res.text == "2"
-
         res = requests.post(
             "http://localhost:{}{}".format(
                 port,
