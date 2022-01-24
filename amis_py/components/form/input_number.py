@@ -5,6 +5,7 @@ from amis_py.components.base import Prop
 
 class InputNumberProperties(FormItemProperties):
     def __init__(self, *args, **kwargs):
+        super().__init__()
         defaults = [
             Prop("min_value", int, None, "min"),
             Prop("max_value", int, None, "max"),
@@ -17,7 +18,6 @@ class InputNumberProperties(FormItemProperties):
             Prop("unit_options", list, None, "unitOptions"),
             Prop("value", int, None)
         ]
-        super().__init__()
         self.update_defaults(defaults)
         self.update_properties(**kwargs)
 
