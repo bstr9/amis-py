@@ -1,24 +1,25 @@
 from .form_item import FormItem
-from .properties import FormItemProperties, _Prop
+from .properties import FormItemProperties
+from amis_py.components.base import Prop
 
 
 class InputNumberProperties(FormItemProperties):
-    def __new__(cls, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
+        super().__init__()
         defaults = [
-            _Prop("min_value", int, None, "min"),
-            _Prop("max_value", int, None, "max"),
-            _Prop("step", int, None),
-            _Prop("precision", float, None),
-            _Prop("show_steps", int, None, "showSteps"),
-            _Prop("prefix", str, ""),
-            _Prop("suffix", str, ""),
-            _Prop("kilobit_separator", int, None, "kilobitSeparator"),
-            _Prop("unit_options", list, None, "unitOptions"),
-            _Prop("value", int, None)
+            Prop("min_value", int, None, "min"),
+            Prop("max_value", int, None, "max"),
+            Prop("step", int, None),
+            Prop("precision", float, None),
+            Prop("show_steps", int, None, "showSteps"),
+            Prop("prefix", str, ""),
+            Prop("suffix", str, ""),
+            Prop("kilobit_separator", int, None, "kilobitSeparator"),
+            Prop("unit_options", list, None, "unitOptions"),
+            Prop("value", int, None)
         ]
-        instance = super().__new__(cls)
-        instance.__defaults = instance.update_defaults(defaults)
-        return instance
+        self.update_defaults(defaults)
+        self.update_properties(**kwargs)
 
 
 class InputNumber(FormItem):
