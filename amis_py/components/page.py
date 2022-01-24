@@ -1,4 +1,4 @@
-from amis_py.components.base import Prop, Properties
+from amis_py.components.base import Prop, Properties, BaseComponent
 
 
 class PageProperties(Properties):
@@ -12,3 +12,7 @@ class PageProperties(Properties):
         ]
         self.update_defaults(defaults)
         self.update_properties(**kwargs)
+
+
+class Page(BaseComponent):
+    pass
