@@ -55,6 +55,3 @@ class InputNumber(FormItem):
     @value.setter
     def value(self, value):
         self.__view["name"] = value
-
-    def render(self):
-        return self.__view

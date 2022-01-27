@@ -81,11 +81,21 @@ class BaseComponent:
     __type = "base"
     __view = {}
 
+    def __init__(self):
+        pass
+
+    def update(self):
+        # use update function to update model dataset
+        self.__view = {}
+
     def view(self):
-        return {}
+        # the view function is used to set sub components
+        return self.__view
 
     def create(self):
+        # use create function to generate default dataset
         self.data = {}
 
     def render(self):
-        return {}
+        # the render function is the hook for amis_py.components.BaseComponent
+        return self.__view
