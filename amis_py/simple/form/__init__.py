@@ -4,15 +4,15 @@ from logging import getLogger
 
 
 class SimpleForm(Form):
-    __view = {
-        "type": "form",
-        "api": "",
-        "body": []
-    }
-
     def __init__(self):
         # use self.create() to generate default dataset
-        super(SimpleForm, self).__init__()
+        super().__init__()
+        self._view = {
+            "type": "form",
+            "api": "",
+            "body": []
+        }
+
         self.create()
         if not isinstance(self.data, dict):
             raise TypeInvalidError(
@@ -39,10 +39,11 @@ class SimpleForm(Form):
                             )
                         )
                     view_v.name = view_k
-                    self.__view.get("body").append(view_v.render())
+                    self._view.get("body").append(view_v.render())
             if not hitted:
                 getLogger().warning(f"{default_k} was setted in default data,"
                                     "but not setted in view")
 
     def render(self):
-        return self.__view
+        return self._view
+

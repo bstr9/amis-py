@@ -16,12 +16,12 @@ class PageProperties(Properties):
 
 
 class Page(BaseComponent):
-    __view = {
-        "type": "page",
-        "body": []
-    }
-
     def __init__(self, props=PageProperties()):
+        super().__init__()
+        self._view = {
+            "type": "page",
+            "body": []
+        }
         self.create()
         if not isinstance(self.data, dict):
             raise TypeInvalidError(
@@ -33,15 +33,16 @@ class Page(BaseComponent):
             raise TypeInvalidError(
                 "component Form can't accept view with type"
                 "{}".format(type(view)))
-        self.__view.update(props.properties)
-        for _, view_v in view:
+        self._view.update(props.properties)
+        for _, view_v in view.items():
+            import pdb; pdb.set_trace()
             if not hasattr(view_v, "render"):
                 raise TypeInvalidError(
                     "set invalid component {} as view".format(
                         view_v.__class__.__name__
                     )
                 )
-            self.__view.get("body").append(view_v.render())
+            self._view.get("body").append(view_v.render())
 
     def add(self, component: BaseComponent):
         if not hasattr(component, "render"):
@@ -50,5 +51,5 @@ class Page(BaseComponent):
                     component.__class__.__name__
                 )
             )
-        self.__view.get("body").append(component.render())
+        self._view.get("body").append(component.render())
         return self

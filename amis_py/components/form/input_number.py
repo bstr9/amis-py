@@ -23,35 +23,33 @@ class InputNumberProperties(FormItemProperties):
 
 
 class InputNumber(FormItem):
-    """
-    doc:
-    """
-    __type = "input-number"
-
     def __init__(
         self, props: InputNumberProperties = InputNumberProperties()
     ):
-        self.__view = {
-            "type": self.__type,
+        super().__init__(props)
+        self._type = "input-number"
+        self._view = {
+            "type": self._type,
         }
-        self.__view.update(props.properties)
+        self._view.update(props.properties)
         if not props.get("name"):
-            self.__view["name"] = props.get("label")
+            self._view["name"] = props.get("label")
 
     @property
     def name(self):
-        return self.__view.get("name")
+        return self._view.get("name")
 
     @name.setter
     def name(self, name):
-        self.__view["name"] = name
-        if self.__view.get("label") == "":
-            self.__view["label"] = name
+        self._view["name"] = name
+        if self._view.get("label") == "":
+            self._view["label"] = name
 
     @property
     def value(self):
-        return self.__view.get("value")
+        return self._view.get("value")
 
     @value.setter
     def value(self, value):
-        self.__view["name"] = value
+        self._view["name"] = value
+

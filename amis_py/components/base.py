@@ -29,8 +29,9 @@ class Prop:
 
 
 class Properties:
-    defaults = []
-    properties = {}
+    def __init__(self):
+        self.defaults = []
+        self.properties = {}
 
     def update_properties(self, **kwargs):
         for k, v in kwargs.items():
@@ -78,19 +79,17 @@ class Properties:
 
 
 class BaseComponent:
-    __type = "base"
-    __view = {}
-
     def __init__(self):
-        pass
+        self._type = "base"
+        self._view = {}
 
     def update(self):
         # use update function to update model dataset
-        self.__view = {}
+        return
 
     def view(self):
         # the view function is used to set sub components
-        return self.__view
+        return {}
 
     def create(self):
         # use create function to generate default dataset
@@ -98,4 +97,4 @@ class BaseComponent:
 
     def render(self):
         # the render function is the hook for amis_py.components.BaseComponent
-        return self.__view
+        return self._view

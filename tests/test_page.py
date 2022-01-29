@@ -19,5 +19,6 @@ class TestPage(TestCase):
                 }
 
         test_form = TestForm()
-        page = Page().add(test_form) view = page.render()
+        page = Page().add(test_form)
+        view = page.render()
         print(view)

@@ -3,14 +3,14 @@ from .properties import FormItemProperties
 
 
 class FormItem(BaseComponent):
-    __type = "form-item"
-
     def __init__(
         self,
         props: FormItemProperties
     ):
-        self.__view = {
-            "type": self.__type,
+        super().__init__()
+        self._type = "form-item"
+        self._view = {
+            "type": self._type,
             "name": "",
             "label": props.get("label"),
         }
