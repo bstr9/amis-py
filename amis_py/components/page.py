@@ -35,7 +35,6 @@ class Page(BaseComponent):
                 "{}".format(type(view)))
         self._view.update(props.properties)
         for _, view_v in view.items():
-            import pdb; pdb.set_trace()
             if not hasattr(view_v, "render"):
                 raise TypeInvalidError(
                     "set invalid component {} as view".format(
