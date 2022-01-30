@@ -202,6 +202,7 @@ class App:
             )
             self._threads.append(t)
             t.start()
+
         while True:
             if self._stopped:
                 print("stop server")
@@ -211,7 +212,7 @@ class App:
                     print("have dead thread, recreate one")
                     t = threading.Thread(
                         target=self._listen,
-                        args=(socket),
+                        args=(_socket,),
                         daemon=True
                     )
                     self._threads[index] = t
@@ -267,7 +268,7 @@ class App:
 
     def add_url_rule(
             self,
-            rule,
+            rule, # noqa: to suit flask api
             endpoint=None,
             view_func=None,
             provid_automatic_options=None,

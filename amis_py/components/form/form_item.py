@@ -7,7 +7,7 @@ class FormItem(BaseComponent):
         self,
         props: FormItemProperties
     ):
-        super().__init__()
+        super().__init__(props)
         self._type = "form-item"
         self._view = {
             "type": self._type,

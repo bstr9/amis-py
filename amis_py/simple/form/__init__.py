@@ -6,7 +6,7 @@ from logging import getLogger
 class SimpleForm(Form):
     def __init__(self):
         # use self.create() to generate default dataset
-        super().__init__()
+        super().__init__({})
         self._view = {
             "type": "form",
             "api": "",

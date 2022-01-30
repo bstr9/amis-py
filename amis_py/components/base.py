@@ -79,7 +79,7 @@ class Properties:
 
 
 class BaseComponent:
-    def __init__(self):
+    def __init__(self, props):
         self._type = "base"
         self._view = {}
 
@@ -94,10 +94,6 @@ class BaseComponent:
     def create(self):
         # use create function to generate default dataset
         self.data = {}
-
-    def gen_hash(self):
-        # generate random hash value to the component
-        self.hash = get_random_hash()
 
     def render(self):
         # the render function is the hook for amis_py.components.BaseComponent
