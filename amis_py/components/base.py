@@ -1,5 +1,5 @@
 from logging import getLogger
-from amis_py.utils import is_default
+from amis_py.utils import is_default, get_random_hash
 
 
 class Prop:
@@ -94,6 +94,10 @@ class BaseComponent:
     def create(self):
         # use create function to generate default dataset
         self.data = {}
+
+    def gen_hash(self):
+        # generate random hash value to the component
+        self.hash = get_random_hash()
 
     def render(self):
         # the render function is the hook for amis_py.components.BaseComponent
