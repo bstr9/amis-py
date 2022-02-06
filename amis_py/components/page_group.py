@@ -3,23 +3,21 @@ from ..exceptions import TypeInvalidError
 from .base import Prop, Properties, BaseComponent
 
 
-class AppProperties(Properties):
+class PageGroupProperties(Properties):
     def __init__(self, *args, **kwargs):
         super().__init__()
         defaults = [
-            Prop("brand_name", str, "brandName"),
-            Prop("logo", str, ""),
+            Prop("title", str, "title"),
         ]
         self.update_defaults(defaults)
         self.update_properties(**kwargs)
 
 
-class App(BaseComponent):
-    def __init__(self, props):
+class PageGroup(BaseComponent):
+    def __init__(self, props: PageGroupProperties):
         super().__init__(props)
         self._view = {
-            "type": "app",
-            "pages": []
+            "children": []
         }
         self.create()
         view = self.view()
@@ -28,14 +26,12 @@ class App(BaseComponent):
                 "component Form can't accept view with type"
                 "{}".format(type(view)))
         self._view.update(props.properties)
-        for _, component in view.items():
-            self.add(component)
 
-    def add(self, component: Page):
-        if not isinstance(component, Page):
-            raise TypeInvalidError(
-                "can not set type {} "
-                "as sub page in app".format(
-                    type(component)))
-        self._view.get("pages").append(component.render())
-        return self
+
+"""
+example:
+    group = PageGroup(PageGroupProperties(title="hello")
+    page = Page(PageGroupProperties(title="hello").add(From())
+    group.add(page, title="hello")
+    group.add(page, title="???")
+"""

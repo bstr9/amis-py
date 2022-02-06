@@ -1,4 +1,4 @@
-from amis_py.exceptions import TypeInvalidError
+from ..exceptions import TypeInvalidError
 from .base import Prop, Properties, BaseComponent
 
 
