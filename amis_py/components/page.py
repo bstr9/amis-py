@@ -1,5 +1,5 @@
 from amis_py.exceptions import TypeInvalidError
-from amis_py.components.base import Prop, Properties, BaseComponent
+from .base import Prop, Properties, BaseComponent
 
 
 class PageProperties(Properties):
