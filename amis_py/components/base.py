@@ -82,6 +82,7 @@ class BaseComponent:
     def __init__(self, props):
         self._type = "base"
         self._view = {}
+        self.props = props
 
     def update(self):
         # use update function to update model dataset
