@@ -1,5 +1,5 @@
 from logging import getLogger
-from amis_py.utils import is_default
+from amis_py.utils import is_default, get_random_hash
 
 
 class Prop:
@@ -29,8 +29,9 @@ class Prop:
 
 
 class Properties:
-    defaults = []
-    properties = {}
+    def __init__(self):
+        self.defaults = []
+        self.properties = {}
 
     def update_properties(self, **kwargs):
         for k, v in kwargs.items():
@@ -78,14 +79,23 @@ class Properties:
 
 
 class BaseComponent:
-    __type = "base"
-    __view = {}
+    def __init__(self, props):
+        self._type = "base"
+        self._view = {}
+        self.props = props
+
+    def update(self):
+        # use update function to update model dataset
+        return
 
     def view(self):
+        # the view function is used to set sub components
         return {}
 
     def create(self):
+        # use create function to generate default dataset
         self.data = {}
 
     def render(self):
-        return {}
+        # the render function is the hook for amis_py.components.BaseComponent
+        return self._view
