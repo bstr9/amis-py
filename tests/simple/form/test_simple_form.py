@@ -10,7 +10,7 @@ class TestSimpleForm(TestCase):
         class TestForm(SimpleForm):
             def create(self):
                 self.data = {
-                    "id": None,
+                    "id": 1,
                 }
 
             def view(self):
@@ -26,8 +26,9 @@ class TestSimpleForm(TestCase):
                 assert item == {
                     "type": "input-number",
                     "label": "id",
-                    "name": "id"
-                                }
+                    "name": "id",
+                    "value": 1
+                }
             else:
                 raise UnitTestException(
                     f"invalid label {label} in TestSimpleForm view")

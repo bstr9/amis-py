@@ -21,4 +21,15 @@ class TestPage(TestCase):
         test_form = TestForm()
         page = Page().add(test_form)
         view = page.render()
-        print(view)
+        assert view == {
+            'type': 'page',
+            'body': [{
+                'type': 'form',
+                'api': '',
+                'body': [{
+                    'label': 'id',
+                    'name': 'id',
+                    'type': 'input-number'
+                }],
+            }]
+        }
