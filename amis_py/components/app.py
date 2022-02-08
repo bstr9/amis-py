@@ -1,6 +1,9 @@
 from .page import Page
-from ..exceptions import TypeInvalidError
+from .page_group import PageGroup
 from .base import Prop, Properties, BaseComponent
+from ..exceptions import TypeInvalidError
+
+from typing import Union
 
 
 class AppProperties(Properties):
@@ -31,11 +34,22 @@ class App(BaseComponent):
         for _, component in view.items():
             self.add(component)
 
-    def add(self, component: Page):
-        if not isinstance(component, Page):
+    def add(self, component: Union[Page, PageGroup]):
+        if isinstance(component, PageGroup):
+            self._view.get("pages").append(component.render())
+        elif isinstance(component, Page):
+            last_group = None
+            for item in self._view.get("pages").reverse():
+                if isinstance(item):
+                    last_group = item
+                    break
+            if not last_group:
+                last_group = PageGroup()
+            last_group.add(component)
+            self._view.get("pages").append(last_group)
+        else:
             raise TypeInvalidError(
                 "can not set type {} "
                 "as sub page in app".format(
                     type(component)))
-        self._view.get("pages").append(component.render())
         return self

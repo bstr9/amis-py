@@ -19,6 +19,7 @@ class PageGroup(BaseComponent):
         group = PageGroup(PageGroupProperties(title="hello")
         page = Page(PageGroupProperties(title="hello").add(From())
         group.add(page, title="hello")
+
     Example2:
         page = Page(PageGroupProperties(title="hello").add(From())
         class TestPageGroup(PageGroup):
@@ -29,7 +30,7 @@ class PageGroup(BaseComponent):
                 }
         page_group = TestPageGroup(PageGroupProperties(title="hello"))
     """
-    def __init__(self, props: PageGroupProperties):
+    def __init__(self, props: PageGroupProperties = PageGroupProperties()):
         super().__init__(props)
         self._view = {
             "children": []

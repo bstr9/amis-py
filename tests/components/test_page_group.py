@@ -7,7 +7,7 @@ class TestPageGroup(TestCase):
             Page, PageGroup, PageProperties, PageGroupProperties)
         from amis_py.components.form import InputNumber, InputNumberProperties
         from amis_py.simple.form import SimpleForm
-        
+    
         class TestForm(SimpleForm):
             def create(self):
                 self.data = {
@@ -39,7 +39,8 @@ class TestPageGroup(TestCase):
                             "body": [{
                                 "type": "input-number",
                                 "label": "id",
-                                "name": "id"
+                                "name": "id",
+                                "value": 1
                             }]
                         }]
                     }
@@ -55,7 +56,8 @@ class TestPageGroup(TestCase):
                             "body": [{
                                 "type": "input-number",
                                 "label": "id",
-                                "name": "id"
+                                "name": "id",
+                                "value": 1
                             }]
                         }]
                     }

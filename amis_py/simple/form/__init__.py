@@ -39,6 +39,8 @@ class SimpleForm(Form):
                             )
                         )
                     view_v.name = view_k
+                    if default_v:
+                        view_v.value = default_v
                     self._view.get("body").append(view_v.render())
             if not hitted:
                 getLogger().warning(f"{default_k} was setted in default data,"

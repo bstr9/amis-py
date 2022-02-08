@@ -1,3 +1,4 @@
+from .app import App
 from .form import (
     Form, FormItem, InputNumber, InputNumberProperties)
 from .page import Page, PageProperties
@@ -6,6 +7,7 @@ from .page_group import PageGroup, PageGroupProperties
 
 
 __all__ = (
+    "App",
     "Form",
     "FormItem",
     "InputNumber",
