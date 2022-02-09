@@ -38,7 +38,8 @@ class Page(BaseComponent):
             self.add(component)
 
     def add(self, component: BaseComponent):
-        if not hasattr(component, "render"):
+        if not isinstance(component, BaseComponent) and \
+                not hasattr(component, "render"):
             raise TypeInvalidError(
                 "set invalid component {} as view".format(
                     component.__class__.__name__

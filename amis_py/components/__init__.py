@@ -1,4 +1,4 @@
-from .app import App
+from .app import AppComponent
 from .form import (
     Form, FormItem, InputNumber, InputNumberProperties)
 from .page import Page, PageProperties
@@ -7,7 +7,7 @@ from .page_group import PageGroup, PageGroupProperties
 
 
 __all__ = (
-    "App",
+    "AppComponent",
     "Form",
     "FormItem",
     "InputNumber",

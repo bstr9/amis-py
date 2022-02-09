@@ -4,6 +4,7 @@ import time
 import json
 import socket
 import hashlib
+import traceback
 import threading
 from urllib import parse
 
@@ -66,6 +67,13 @@ class HttpRequest:
         except Exception:
             return {}
 
+    @property
+    def origin(self):
+        data = self._request.splitlines()[8]
+        match = re.findall('([a-zA-z]+://[^\s]*)', data)
+        if match and len(match):
+            return match[0]
+        return '*'
 
 class Response:
 
@@ -141,6 +149,15 @@ class Response:
                 self.content_type = data['content-type']
             if 'headers' in data:
                 self.headers = data['headers']
+            if 'origin' in data:
+                self.headers.update({
+                    'Access-Control-Allow-Origin': data['origin'],
+                    'Access-Control-Allow-Methods':
+                        'PUT,POST,GET,OPTIONS,DELETE,HEAD',
+                    'Access-Control-Allow-Credentials': 'true',
+                    'Access-Control-Allow-Headers':
+                        'x-requested-with,content-type'
+                })
 
         def build(self):
             data = []
@@ -179,8 +196,8 @@ class App:
                 for res in self.responses:
                     req_conn.send(res)
                 req_conn.close()
-        except Exception as e:
-            print(e)
+        except Exception:
+            print(traceback.format_exc())
             req_conn.close()
 
     def run(self):
@@ -249,11 +266,14 @@ class App:
         if path is not None:
             res = self.routes[path](**params)
             if isinstance(res, dict):
-                self.response.send_json(res)
+                self.response.send_json(
+                    res, options={'origin': self.request.origin})
             elif isinstance(res, bytes):
-                self.response.send_raw(res)
+                self.response.send_raw(
+                    res, options={'origin': self.request.origin})
             else:
-                self.response.send(str(res))
+                self.response.send(
+                    str(res), options={'origin': self.request.origin})
         else:
             self.response.not_found()
 

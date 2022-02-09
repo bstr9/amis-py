@@ -17,8 +17,8 @@ class AppProperties(Properties):
         self.update_properties(**kwargs)
 
 
-class App(BaseComponent):
-    def __init__(self, props):
+class AppComponent(BaseComponent):
+    def __init__(self, props: AppProperties = AppProperties()):
         super().__init__(props)
         self._view = {
             "type": "app",
@@ -39,14 +39,14 @@ class App(BaseComponent):
             self._view.get("pages").append(component.render())
         elif isinstance(component, Page):
             last_group = None
-            for item in self._view.get("pages").reverse():
+            for item in reversed(self._view.get("pages")):
                 if isinstance(item):
                     last_group = item
                     break
             if not last_group:
                 last_group = PageGroup()
             last_group.add(component)
-            self._view.get("pages").append(last_group)
+            self._view.get("pages").append(last_group.render())
         else:
             raise TypeInvalidError(
                 "can not set type {} "

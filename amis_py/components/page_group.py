@@ -1,6 +1,6 @@
 from .page import Page
-from ..exceptions import TypeInvalidError
 from .base import Prop, Properties, BaseComponent
+from ..exceptions import TypeInvalidError
 
 
 class PageGroupProperties(Properties):
@@ -52,7 +52,7 @@ class PageGroup(BaseComponent):
             raise TypeInvalidError("please use string as page title")
 
         if not title:
-            title = page.props.get("title")
+            title = page.props.get("title") or page.__class__.__name__
         self._view.get("children").append({
             "label": title,
             "schema": page.render()
