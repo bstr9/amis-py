@@ -99,3 +99,8 @@ class BaseComponent:
     def render(self):
         # the render function is the hook for amis_py.components.BaseComponent
         return self._view
+    
+    @property
+    def route(self):
+        # the route function returns the component's route url
+        return "/{}/{}".format(self._type, hash(self))

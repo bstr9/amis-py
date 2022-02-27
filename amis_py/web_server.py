@@ -271,6 +271,12 @@ class App:
             elif isinstance(res, bytes):
                 self.response.send_raw(
                     res, options={'origin': self.request.origin})
+            elif isinstance(res, str):
+                self.response.send(
+                    res, options={
+                        'origin': self.request.origin,
+                        'content-type': 'text/html'
+                    })
             else:
                 self.response.send(
                     str(res), options={'origin': self.request.origin})

@@ -1,3 +1,6 @@
+import os
+import json
+
 from ..exceptions import TypeInvalidError
 from .base import Prop, Properties, BaseComponent
 
@@ -18,6 +21,7 @@ class PageProperties(Properties):
 class Page(BaseComponent):
     def __init__(self, props=PageProperties()):
         super().__init__(props)
+        self._type = "page"
         self._view = {
             "type": "page",
             "body": []
@@ -36,6 +40,13 @@ class Page(BaseComponent):
         self._view.update(props.properties)
         for _, component in view.items():
             self.add(component)
+        template_path = os.path.join(
+            os.path.dirname(
+                os.path.dirname(os.path.abspath(__file__))),
+            "templates/page.html.template"
+        )
+        with open(template_path, "r") as template:
+            self.template = template.read()
 
     def add(self, component: BaseComponent):
         if not isinstance(component, BaseComponent) and \
@@ -47,3 +58,17 @@ class Page(BaseComponent):
             )
         self._view.get("body").append(component.render())
         return self
+
+    @property
+    def title(self):
+        return self.props.get("title") or \
+            self.props.get("lable") or \
+            self.props.get("name") or \
+            "unknown"
+
+    def page_view(self):
+        content = self.template.replace(
+            "page.title", self.title)
+        content = content.replace(
+            "page.json", json.dumps(self.render()))
+        return content
